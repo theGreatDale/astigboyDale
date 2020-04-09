@@ -1,0 +1,37 @@
+<?php
+
+    //CHECK IF REQUEST METHOD IS POST
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        //INCLUDE DATABASE CONNECTION FILE
+        include 'connection.php';
+
+        //CREATE CONNECTION
+        $connection = new mysqli($HostName, $HostUser, $HostPassword, $DatabaseName);
+        if ($connection->connect_error) {
+            die('Connection Failed: '.$connection->connect_error);
+        }
+
+        //FETCH ALL POST DATA AND ASSIGN TO THEIR RESPECTIVE VARIABLES
+        $time = mysqli_real_escape_string($connection, $_POST['time']);
+
+        $price = mysqli_real_escape_string($connection, $_POST['price']);
+
+        $time2 = mysqli_real_escape_string($connection, $_POST['time2']);
+        $date = mysqli_real_escape_string($connection, $_POST['date']);
+        $id = mysqli_real_escape_string($connection, $_POST['id']);
+        //FILTER DATABASE WITH USERNAME AND PASSWORD FROM THE POST REQUEST
+        $updatesql = "UPDATE tblcollectorsrequest SET time='$time',time2='$time2',price='$price',date='$date' WHERE id='$id' ";
+
+        try {
+            if (mysqli_query($connection, $updatesql)) {
+                echo json_encode('Schedule Succesfully Updated!');
+            } else {
+                echo json_encode('Something Went Wrong! Data Cannot Be Updated');
+            }
+        } catch (Exception $e) {
+            echo "$e";
+        } finally {
+            //CLOSE CONNECTION
+            mysqli_close($connection);
+        }
+    }
