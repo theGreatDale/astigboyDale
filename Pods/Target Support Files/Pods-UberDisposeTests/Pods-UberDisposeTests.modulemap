@@ -1,0 +1,6 @@
+framework module Pods_UberDisposeTests {
+  umbrella header "Pods-UberDisposeTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
